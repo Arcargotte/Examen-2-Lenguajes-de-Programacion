@@ -71,7 +71,9 @@ function POST_Parser (expression)
         return POST_Parser (string.sub(expression, 2, #expression))
     elseif (Top(Stack) == "/") then
         Pop(Stack)
-        Push(Stack, tonumber(Pop(Stack)) / tonumber(Pop(Stack)))
+        local right = tonumber(Pop(Stack))
+        local left = tonumber(Pop(Stack))
+        Push(Stack, left / right)
         return POST_Parser (string.sub(expression, 2, #expression))
     else 
         return POST_Parser (string.sub(expression, 2, #expression))
@@ -131,90 +133,77 @@ function POST_Mostrar(expression, lastOperation)
 
     Push(Stack, string.sub(expression, 1, 1))
 
-    if (Top(Stack) == "+" and PrecedenteTable[lastOperation] > PrecedenteTable["+"]) then
+    if ((Top(Stack) == "+" or Top(Stack) == "-" or Top(Stack) == "*" or Top(Stack) == "/") and lastOperation == "$") then
         local operator = Pop(Stack)
         local right = Pop(Stack)
         local left = Pop(Stack)
         Push(Stack, left .. " " .. operator .. " " .. right)
-        return POST_Mostrar(string.sub(expression, 2, #expression), "+")
-    
-    elseif (Top(Stack) == "+" and PrecedenteTable[lastOperation] <= PrecedenteTable["+"]) then
+        return POST_Mostrar(string.sub(expression, 2, #expression), operator)
+    elseif ((Top(Stack) == "+" or Top(Stack) == "-" or Top(Stack) == "*" or Top(Stack) == "/") and (PrecedenteTable[Top(Stack)] > PrecedenteTable[lastOperation])) then
         local operator = Pop(Stack)
         local right = Pop(Stack)
         local left = Pop(Stack)
-        Push(Stack, "(" .. left .. " " .. operator .. " " .. right .. ")")
-        return POST_Mostrar(string.sub(expression, 2, #expression), "+")
-    
-    elseif (Top(Stack) == "-" and PrecedenteTable[lastOperation] > PrecedenteTable["-"]) then
-        local operator = Pop(Stack)
-        local right = Pop(Stack)
-        local left = Pop(Stack)
-        Push(Stack, left .. " " .. operator .. " " .. right)
-        return POST_Mostrar(string.sub(expression, 2, #expression), "-")
 
-    elseif (Top(Stack) == "-" and PrecedenteTable[lastOperation] <= PrecedenteTable["-"]) then
-        local operator = Pop(Stack)
-        local right = Pop(Stack)
-        local left = Pop(Stack)
-        Push(Stack, "(" .. left .. " " .. operator .. " " .. right .. ")")
-        return POST_Mostrar(string.sub(expression, 2, #expression), "-")
-    
-    elseif (Top(Stack) == "*" and PrecedenteTable[lastOperation] <= PrecedenteTable["*"]) then
-        local operator = Pop(Stack)
-        local right = Pop(Stack)
-        local left = Pop(Stack)
-        Push(Stack, left .. " " .. operator .. " " .. right)
-        return POST_Mostrar(string.sub(expression, 2, #expression), "*")
+        if (PrecedenteTable[string.sub(left, 3, 3)] and PrecedenteTable[string.sub(right, 3, 3)] and PrecedenteTable[string.sub(left, 3, 3)] < PrecedenteTable[operator] and PrecedenteTable[string.sub(right, 3, 3)] < PrecedenteTable[operator]) then
+            Push(Stack, "(" .. left .. ") " .. operator .. " (" .. right .. ")")
+        elseif (PrecedenteTable[string.sub(left, 3, 3)] and PrecedenteTable[string.sub(left, 3, 3)] < PrecedenteTable[operator]) then
+            Push(Stack, "(" .. left .. ") " .. operator .. " " .. right)
+        elseif (PrecedenteTable[string.sub(right, 3, 3)] and PrecedenteTable[string.sub(right, 3, 3)] < PrecedenteTable[operator]) then
+            Push(Stack, left .. " " .. operator .. " ("  .. right .. ")")
+        else
+            Push(Stack, left .. " " .. operator .. " " .. right)
+        end
 
-    elseif (Top(Stack) == "/" and PrecedenteTable[lastOperation] <= PrecedenteTable["/"]) then
+        return POST_Mostrar(string.sub(expression, 2, #expression), operator)
+    elseif ((Top(Stack) == "+" or Top(Stack) == "-" or Top(Stack) == "*" or Top(Stack) == "/") and (PrecedenteTable[Top(Stack)] <= PrecedenteTable[lastOperation])) then
         local operator = Pop(Stack)
         local right = Pop(Stack)
         local left = Pop(Stack)
         Push(Stack, left .. " " .. operator .. " " .. right)
-        return POST_Mostrar(string.sub(expression, 2, #expression), "/")
+        return POST_Mostrar(string.sub(expression, 2, #expression), operator)
     end
 
     return POST_Mostrar(string.sub(expression, 2, #expression), lastOperation)
 end
 
-function Menu()
-    while true do
-        io.write("\nEscribe una opcion (EVAL, MOSTRAR, SALIR): ")
-        local input = io.read()
+-- function Menu()
+--     while true do
+--         io.write("\nEscribe una opcion (EVAL, MOSTRAR, SALIR): ")
+--         local input = io.read()
 
-        local opcion, modo, expr = string.match(input, "(%S+)%s*(%S*)%s*(.*)")
-        print(opcion)
-        if opcion == "EVAL" then
-            if modo == "PRE" then
-                print(PRE_Parser(expr))
+--         local opcion, modo, expr = string.match(input, "(%S+)%s*(%S*)%s*(.*)")
+--         print(opcion)
+--         if opcion == "EVAL" then
+--             if modo == "PRE" then
+--                 print(PRE_Parser(expr))
 
-            elseif modo == "POST" then
-                print(POST_Parser(expr))
+--             elseif modo == "POST" then
+--                 print(POST_Parser(expr))
 
-            else
-                print("Debes especificar el modo: EVAL PRE exp o EVAL POST exp")
-            end
+--             else
+--                 print("Debes especificar el modo: EVAL PRE exp o EVAL POST exp")
+--             end
 
-        elseif opcion == "MOSTRAR" then
-            if modo == "PRE" then
-                print(PRE_Mostrar(expr))
+--         elseif opcion == "MOSTRAR" then
+--             if modo == "PRE" then
+--                 print(PRE_Mostrar(expr))
 
-            elseif modo == "POST" then
-                print(POST_Mostrar(expr, "$"))
+--             elseif modo == "POST" then
+--                 print(POST_Mostrar(expr, "$"))
 
-            else
-                print("Debes especificar el modo: MOSTRAR PRE o MOSTRAR POST")
-            end
+--             else
+--                 print("Debes especificar el modo: MOSTRAR PRE o MOSTRAR POST")
+--             end
 
-        elseif opcion == "SALIR" then
-            print("Saliendo del programa...")
-            break
+--         elseif opcion == "SALIR" then
+--             print("Saliendo del programa...")
+--             break
 
-        else
-            print("Error: opción inválida")
-            print("Usage: EVAL [PRE][POST] exp, MOSTRAR [PRE][POST] exp, SALIR")
-        end
-    end
-end
+--         else
+--             print("Error: opción inválida")
+--             print("Usage: EVAL [PRE][POST] exp, MOSTRAR [PRE][POST] exp, SALIR")
+--         end
+--     end
+-- end
 
-Menu()
+-- Menu()
