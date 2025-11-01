@@ -4,22 +4,28 @@ end
 
 function PRE_Parser (expression) 
 
-    expression = RemoveWhitespaces(expression)
-
-    if (#expression == 1) then
-        return tonumber(string.sub(expression, 1, 1))
+    local function calc (operator, leftValue, rightValue)
+        if (operator == "+") then
+            return leftValue + rightValue
+        elseif (operator == "*") then
+            return leftValue * rightValue
+        elseif (operator == "/") then
+            return leftValue / rightValue
+        elseif (operator == "-") then
+            return leftValue - rightValue
+        else
+            return "Ups"
+        end
     end
 
-    if (string.sub(expression, 1, 1) == '+') then
-        return PRE_Parser(string.sub(expression, 2, #expression - 1)) + tonumber(string.sub(expression, #expression, #expression))
-    elseif (string.sub(expression, 1, 1) == '*') then 
-        return PRE_Parser(string.sub(expression, 2, #expression - 1)) * tonumber(string.sub(expression, #expression, #expression))
-    elseif (string.sub(expression, 1, 1) == '-') then 
-        return PRE_Parser(string.sub(expression, 2, #expression - 1)) - tonumber(string.sub(expression, #expression, #expression))
-    elseif (string.sub(expression, 1, 1) == '/') then 
-        return PRE_Parser(string.sub(expression, 2, #expression - 1)) / tonumber(string.sub(expression, #expression, #expression))
-    end
+    if (#expression ~= 0 and (string.sub(expression, 1, 1) ~= "+" and string.sub(expression, 1, 1) ~= "*" and string.sub(expression, 1, 1) ~= "-" and string.sub(expression, 1, 1) ~= "/")) then
+        return tonumber(string.sub(expression, 1, 1)), string.sub(expression, 2, #expression)
+    else
+        local leftValue, rest1 = PRE_Parser(string.sub(expression, 2, #expression))
+        local rightValue, rest2 = PRE_Parser(rest1)
 
+        return calc(string.sub(expression, 1, 1), leftValue, rightValue), rest2
+    end
 end
 
 Stack = {}
@@ -49,8 +55,6 @@ function PrintStack(stack)
 end
 
 function POST_Parser (expression) 
-
-    expression = RemoveWhitespaces(expression)
 
     if (#expression == 0) then
         return Top(Stack)
@@ -89,43 +93,47 @@ PrecedenteTable = {
 }
 
 function PRE_Mostrar(expression, lastOperation)
-
-    expression = RemoveWhitespaces(expression)
-
-    if (#expression == 1) then
-        return string.sub(expression, 1, 1)
+    local function printExpr (operator, leftValue, rightValue, appendParenthesis)
+        if(appendParenthesis) then
+            if (operator == "+") then
+                return "(" .. leftValue .. " + " .. rightValue .. ")"
+            elseif (operator == "*") then
+                return "(" .. leftValue .. " * " .. rightValue .. ")"
+            elseif (operator == "/") then
+                return "(" .. leftValue .. " / " .. rightValue .. ")"
+            elseif (operator == "-") then
+                return "(" .. leftValue .. " - " .. rightValue .. ")"
+            else
+                return "(Ups)"
+            end
+        else
+            if (operator == "+") then
+                return leftValue .. " + " .. rightValue
+            elseif (operator == "*") then
+                return leftValue .. " * " .. rightValue
+            elseif (operator == "/") then
+                return leftValue .. " / " .. rightValue
+            elseif (operator == "-") then
+                return leftValue .. " - " .. rightValue
+            else
+                return "Ups"
+            end
+        end
     end
 
-    if (string.sub(expression, 1, 1) == '+' and PrecedenteTable[lastOperation] > PrecedenteTable["+"]) then
-        return "(" .. PRE_Mostrar(string.sub(expression, 2, #expression - 1), "+") .. " + " .. string.sub(expression, #expression, #expression) .. ")"
+    if (#expression ~= 0 and (string.sub(expression, 1, 1) ~= "+" and string.sub(expression, 1, 1) ~= "*" and string.sub(expression, 1, 1) ~= "-" and string.sub(expression, 1, 1) ~= "/")) then
+        return string.sub(expression, 1, 1), string.sub(expression, 2, #expression)
+    else
+        local leftValue, rest1 = PRE_Mostrar(string.sub(expression, 2, #expression), string.sub(expression, 1, 1))
+        local rightValue, rest2 = PRE_Mostrar(rest1, string.sub(expression, 1, 1))
+        local placeParenthesis = PrecedenteTable[string.sub(expression, 1, 1)] < PrecedenteTable[lastOperation]
 
-    elseif (string.sub(expression, 1, 1) == '+' and PrecedenteTable[lastOperation] <= PrecedenteTable["+"]) then
-        return PRE_Mostrar(string.sub(expression, 2, #expression - 1), "+") .. " + " .. string.sub(expression, #expression, #expression)
-
-    elseif (string.sub(expression, 1, 1) == '-' and PrecedenteTable[lastOperation] > PrecedenteTable["-"]) then
-        return "(" .. PRE_Mostrar(string.sub(expression, 2, #expression - 1), "-") .. " - " .. string.sub(expression, #expression, #expression) .. ")"
-
-    elseif (string.sub(expression, 1, 1) == '-' and PrecedenteTable[lastOperation] <= PrecedenteTable["-"]) then
-        return PRE_Mostrar(string.sub(expression, 2, #expression - 1), "-") .. " - " .. string.sub(expression, #expression, #expression)
-
-    elseif (string.sub(expression, 1, 1) == '*' and PrecedenteTable[lastOperation] > PrecedenteTable["*"]) then
-        return "(" .. PRE_Mostrar(string.sub(expression, 2, #expression - 1), "*") .. " * " .. string.sub(expression, #expression, #expression) .. ")"
-
-    elseif (string.sub(expression, 1, 1) == '*' and PrecedenteTable[lastOperation] <= PrecedenteTable["*"]) then
-        return PRE_Mostrar(string.sub(expression, 2, #expression - 1), "*") .. " * " .. string.sub(expression, #expression, #expression)
-
-    elseif (string.sub(expression, 1, 1) == '/' and PrecedenteTable[lastOperation] > PrecedenteTable["/"]) then
-        return "(" .. PRE_Mostrar(string.sub(expression, 2, #expression - 1), "/") .. " / " .. string.sub(expression, #expression, #expression) .. ")"
-
-    elseif (string.sub(expression, 1, 1) == '/' and PrecedenteTable[lastOperation] <= PrecedenteTable["/"]) then
-        return PRE_Mostrar(string.sub(expression, 2, #expression - 1), "/") .. " / " .. string.sub(expression, #expression, #expression)
+        return printExpr(string.sub(expression, 1, 1), leftValue, rightValue, placeParenthesis), rest2
     end
     
 end
 
 function POST_Mostrar(expression, lastOperation)
-
-    expression = RemoveWhitespaces(expression)
 
     if (#expression == 0) then
         return Top(Stack)
@@ -169,27 +177,51 @@ end
 -- function Menu()
 --     while true do
 --         io.write("\nEscribe una opcion (EVAL, MOSTRAR, SALIR): ")
---         local input = io.read()
+--         local input = string.upper(io.read())
 
 --         local opcion, modo, expr = string.match(input, "(%S+)%s*(%S*)%s*(.*)")
---         print(opcion)
+
 --         if opcion == "EVAL" then
 --             if modo == "PRE" then
---                 print(PRE_Parser(expr))
+--                 expr = RemoveWhitespaces(expr)
+--                 local ok, result = pcall(PRE_Parser, expr)
+--                 if (ok) then
+--                     print(result)
+--                 else
+--                     print("Verificar expresión. Expresión es inválida")
+--                 end
 
 --             elseif modo == "POST" then
---                 print(POST_Parser(expr))
+--                 expr = RemoveWhitespaces(expr)
+--                 local ok, result = pcall(POST_Parser, expr)
+--                 if (ok) then
+--                     print(result)
+--                 else
+--                     print("Verificar expresión. Expresión es inválida")
+--                 end
 
 --             else
---                 print("Debes especificar el modo: EVAL PRE exp o EVAL POST exp")
+--                 print("Debes especificar el modo: EVAL PRE expr o EVAL POST expr")
 --             end
 
 --         elseif opcion == "MOSTRAR" then
 --             if modo == "PRE" then
---                 print(PRE_Mostrar(expr))
+--                 expr = RemoveWhitespaces(expr)
+--                 local ok, result = pcall(PRE_Mostrar, expr, "$")
+--                 if (ok) then
+--                     print(result)
+--                 else
+--                     print("Verificar expresión. Expresión es inválida")
+--                 end
 
 --             elseif modo == "POST" then
---                 print(POST_Mostrar(expr, "$"))
+--                 expr = RemoveWhitespaces(expr)
+--                 local ok, result = pcall(POST_Mostrar, expr, "$")
+--                 if (ok) then
+--                     print(result)
+--                 else
+--                     print("Verificar expresión. Expresión es inválida")
+--                 end
 
 --             else
 --                 print("Debes especificar el modo: MOSTRAR PRE o MOSTRAR POST")
@@ -201,7 +233,7 @@ end
 
 --         else
 --             print("Error: opción inválida")
---             print("Usage: EVAL [PRE][POST] exp, MOSTRAR [PRE][POST] exp, SALIR")
+--             print("Usage: EVAL [PRE][POST] expr, MOSTRAR [PRE][POST] expr, SALIR")
 --         end
 --     end
 -- end

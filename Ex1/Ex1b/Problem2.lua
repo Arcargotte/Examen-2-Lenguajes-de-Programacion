@@ -43,5 +43,3 @@ function PrintList(A)
     end
     io.write("\n")
 end
-
-PrintList(MergeSort({3,6,8,1,7}))

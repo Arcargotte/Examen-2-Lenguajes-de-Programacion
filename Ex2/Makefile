@@ -1,5 +1,3 @@
-# Makefile minimalista para pruebas unitarias y cobertura con Busted + LuaCov
-
 all: test coverage
 
 test:

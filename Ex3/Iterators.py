@@ -69,12 +69,11 @@ class MergeSortIterator:
         if self.root.peek() is None:
             raise StopIteration
         
-        v = self.root.peek()
-        self.root.pop()
+        v = self.root.pop()
 
         return v
 
-data = [1, 3, 3, 2, 1, 234, 32, 0]
+data = [1, 3, 3, 2, 1, 234, 32, 0, 11]
 ite = MergeSortIterator(data)
 
 for x in ite:
