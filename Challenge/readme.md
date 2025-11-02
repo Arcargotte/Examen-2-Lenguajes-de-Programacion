@@ -14,7 +14,7 @@ Para medir el tiempo de ejecución en PowerShell:
 Measure-Command { ./time_test.exe }
 ```
 
-Para ejecutar el código con la experiencia planificada:
-```bash
-./maldad
+Para ejecutar el código con la experiencia planificada, ejecute en PowerShell:
+```powershell
+./maldad.exe
 ```
