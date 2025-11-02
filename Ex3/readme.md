@@ -12,5 +12,5 @@ sudo apt install python3
 ```
 2. Ejecute el programa con el intérprete de Python, por ejemplo:  
 ```bash
-python3 MergeSortIterator.py
+python3 Iterators.py
 ```
