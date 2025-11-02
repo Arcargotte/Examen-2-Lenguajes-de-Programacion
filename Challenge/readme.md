@@ -3,6 +3,7 @@
 El programa **maldad.c** implementa funciones recursivas e iterativas para calcular valores derivados de combinaciones, factoriales y la sucesión de Tribonacci.  
 La función principal `maldad(n)` devuelve un valor denominado “EVIL” a partir de estos cálculos.  
 Incluye un ejecutable adicional (**time_test.exe**) para medir los tiempos de ejecución de los primeros 50 enteros.
+La función solicita input del usuario desde stdin. Debe ejecutar el programa para probar distintos valores de n.
 
 # Instrucciones de ejecución
 
