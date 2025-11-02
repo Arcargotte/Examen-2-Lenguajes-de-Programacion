@@ -1,17 +1,20 @@
-## Descripción del programa
+# Descripción del programa
 
-Este programa implementa varias funciones matemáticas en C, incluyendo el factorial, el coeficiente binomial, los números de Narayana y la sucesión de Tribonacci.  
-A partir de estas funciones, define la función `maldad(n)`.  
-El programa fue compilado con **gcc** y ejecutado en **PowerShell**, donde se midieron los tiempos de ejecución mediante el comando `Measure-Command { ./a.exe }`.  
+El programa **maldad.c** implementa funciones recursivas e iterativas para calcular valores derivados de combinaciones, factoriales y la sucesión de Tribonacci.  
+La función principal `maldad(n)` devuelve un valor denominado “EVIL” a partir de estos cálculos.  
+Incluye un ejecutable adicional (**time_test.exe**) para medir los tiempos de ejecución de los primeros 50 enteros.
 
-## Instrucciones de ejecución
+# Instrucciones de ejecución
 
-1. Compile el programa con **gcc**:  
-```bash
-gcc main.c
-```
-2. Ejecútelo en **PowerShell** y mida el tiempo de ejecución con:  
+El código puede ejecutarse en C, C++ y Objective-C con el compilador online:
+https://www.programiz.com/c-programming/online-compiler/
+
+Para medir el tiempo de ejecución en PowerShell:
 ```powershell
-Measure-Command { ./a.exe }
+Measure-Command { ./time_test.exe }
 ```
-3. Si se desea ejecutar el programa con interacción de usuario (modo original), descomente el bloque `main` y elimine el bucle `for` al final del archivo.  
+
+Para ejecutar el código con la experiencia planificada:
+```bash
+./maldad
+```
