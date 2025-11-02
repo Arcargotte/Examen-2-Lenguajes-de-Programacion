@@ -66,31 +66,35 @@ unsigned long long maldad (unsigned long long n) {
 
 int main() {
 
-    int flag = 1;
-    int input;
+    // int flag = 1;
+    // int input;
 
-    while (flag){
-        printf("Please, input a number for EVIL or type 0 to exit the program: \n> ");
-        int status = scanf("%d", &input);
-        if (status != 1) {
-            printf("Not VALID input. Try only numbers\n");
-            while (getchar() != '\n'); 
-            continue;
-        }
-        if (input != 0){
-            if (input > 0 && input <= 100){
-                unsigned long long int result = maldad(input);
-                printf("This is EVIL: %llu\n", result);
-            } else if (input > 100){
-                printf("Too EVIL. Try a smaller number\n");
-            } else if (input < 0) {
-                printf("Not EVIL at all. Try only positive numbers\n");
-            } else {
-                printf("Not VALID input. Try only numbers\n");
-            }
-        } else {
-            flag = 0;
-        }
+    // while (flag){
+    //     printf("Please, input a number for EVIL or type 0 to exit the program: \n> ");
+    //     int status = scanf("%d", &input);
+    //     if (status != 1) {
+    //         printf("Not VALID input. Try only numbers\n");
+    //         while (getchar() != '\n'); 
+    //         continue;
+    //     }
+    //     if (input != 0){
+    //         if (input > 0 && input <= 100){
+    //             unsigned long long int result = maldad(input);
+    //             printf("This is EVIL: %llu\n", result);
+    //         } else if (input > 100){
+    //             printf("Too EVIL. Try a smaller number\n");
+    //         } else if (input < 0) {
+    //             printf("Not EVIL at all. Try only positive numbers\n");
+    //         } else {
+    //             printf("Not VALID input. Try only numbers\n");
+    //         }
+    //     } else {
+    //         flag = 0;
+    //     }
+    // }
+
+    for (int i = 1; i <= 50; i++){
+        maldad(i);
     }
 
     return 0;
