@@ -27,7 +27,8 @@ Y ejecute el archivo makefile.
 make all
 make clean
 ```
-Tome en cuenta que en archivo parser.lua se debe comentar el código del menú para que las pruebas se ejecuten normalmente. Para tener la experiencia de usuario con la que fue diseñada el parser, descomente la función Menu() y ejecute el archivo usando el comando:
+Tome en cuenta que en archivo parser.lua se debe comentar el código del menú para que las pruebas se ejecuten normalmente. Para ejecutar correctamente las pruebas, comente la llamada a la función Menu():
 ```bash
 lua parser.lua
 ```
+
