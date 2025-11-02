@@ -4,4 +4,15 @@ function Dist(n)
     if (n % 2 == 1) then return 1 + Dist(3 * n + 1) end
 end
 
-print(Dist(42))
+function Menu()
+    io.write("Please input a number: ")
+    local input = io.read()
+    local n = tonumber(input)
+    if not n or n <= 0 or n % 1 ~= 0 then
+        print("Error: it must be a positive number.")
+        return
+    end
+    print("Dist(" .. n .. ") = " .. Dist(n))
+end
+
+Menu()
