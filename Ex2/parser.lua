@@ -174,68 +174,68 @@ function POST_Mostrar(expression, lastOperation)
     return POST_Mostrar(string.sub(expression, 2, #expression), lastOperation)
 end
 
--- function Menu()
---     while true do
---         io.write("\nEscribe una opcion (EVAL, MOSTRAR, SALIR): ")
---         local input = string.upper(io.read())
+function Menu()
+    while true do
+        io.write("\nEscribe una opcion (EVAL, MOSTRAR, SALIR): ")
+        local input = string.upper(io.read())
 
---         local opcion, modo, expr = string.match(input, "(%S+)%s*(%S*)%s*(.*)")
+        local opcion, modo, expr = string.match(input, "(%S+)%s*(%S*)%s*(.*)")
 
---         if opcion == "EVAL" then
---             if modo == "PRE" then
---                 expr = RemoveWhitespaces(expr)
---                 local ok, result = pcall(PRE_Parser, expr)
---                 if (ok) then
---                     print(result)
---                 else
---                     print("Verificar expresión. Expresión es inválida")
---                 end
+        if opcion == "EVAL" then
+            if modo == "PRE" then
+                expr = RemoveWhitespaces(expr)
+                local ok, result = pcall(PRE_Parser, expr)
+                if (ok) then
+                    print(result)
+                else
+                    print("Verificar expresión. Expresión es inválida")
+                end
 
---             elseif modo == "POST" then
---                 expr = RemoveWhitespaces(expr)
---                 local ok, result = pcall(POST_Parser, expr)
---                 if (ok) then
---                     print(result)
---                 else
---                     print("Verificar expresión. Expresión es inválida")
---                 end
+            elseif modo == "POST" then
+                expr = RemoveWhitespaces(expr)
+                local ok, result = pcall(POST_Parser, expr)
+                if (ok) then
+                    print(result)
+                else
+                    print("Verificar expresión. Expresión es inválida")
+                end
 
---             else
---                 print("Debes especificar el modo: EVAL PRE expr o EVAL POST expr")
---             end
+            else
+                print("Debes especificar el modo: EVAL PRE expr o EVAL POST expr")
+            end
 
---         elseif opcion == "MOSTRAR" then
---             if modo == "PRE" then
---                 expr = RemoveWhitespaces(expr)
---                 local ok, result = pcall(PRE_Mostrar, expr, "$")
---                 if (ok) then
---                     print(result)
---                 else
---                     print("Verificar expresión. Expresión es inválida")
---                 end
+        elseif opcion == "MOSTRAR" then
+            if modo == "PRE" then
+                expr = RemoveWhitespaces(expr)
+                local ok, result = pcall(PRE_Mostrar, expr, "$")
+                if (ok) then
+                    print(result)
+                else
+                    print("Verificar expresión. Expresión es inválida")
+                end
 
---             elseif modo == "POST" then
---                 expr = RemoveWhitespaces(expr)
---                 local ok, result = pcall(POST_Mostrar, expr, "$")
---                 if (ok) then
---                     print(result)
---                 else
---                     print("Verificar expresión. Expresión es inválida")
---                 end
+            elseif modo == "POST" then
+                expr = RemoveWhitespaces(expr)
+                local ok, result = pcall(POST_Mostrar, expr, "$")
+                if (ok) then
+                    print(result)
+                else
+                    print("Verificar expresión. Expresión es inválida")
+                end
 
---             else
---                 print("Debes especificar el modo: MOSTRAR PRE o MOSTRAR POST")
---             end
+            else
+                print("Debes especificar el modo: MOSTRAR PRE o MOSTRAR POST")
+            end
 
---         elseif opcion == "SALIR" then
---             print("Saliendo del programa...")
---             break
+        elseif opcion == "SALIR" then
+            print("Saliendo del programa...")
+            break
 
---         else
---             print("Error: opción inválida")
---             print("Usage: EVAL [PRE][POST] expr, MOSTRAR [PRE][POST] expr, SALIR")
---         end
---     end
--- end
+        else
+            print("Error: opción inválida")
+            print("Usage: EVAL [PRE][POST] expr, MOSTRAR [PRE][POST] expr, SALIR")
+        end
+    end
+end
 
--- Menu()
+Menu()
