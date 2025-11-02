@@ -1,12 +1,12 @@
 -- spec/parser_spec.lua
-local luaunit = require("luaunit")  -- opcional, si prefieres asserts estilo LuaUnit
-require("parser")    -- archivo donde están tus funciones
+local luaunit = require("luaunit") 
+require("parser")
 
 describe("Pruebas de parser", function()
 
   it("debería parsear correctamente en notación PRE", function()
     local resultado = PRE_Parser("+*+3457")
-    -- assert.is_truthy(resultado)             -- ejemplo básico
+    -- assert.is_truthy(resultado)
     assert.is_equal(resultado, 42)
   end)
 
@@ -18,7 +18,7 @@ describe("Pruebas de parser", function()
 
   it("debería parsear correctamente en notación PRE", function()
     local resultado = PRE_Parser("*+34+21")
-    -- assert.is_truthy(resultado)             -- ejemplo básico
+    -- assert.is_truthy(resultado)
     assert.is_equal(resultado, 21)
   end)
 
