@@ -15,6 +15,7 @@ El valor retornado corresponde al número de pasos requeridos para alcanzar el 1
 ```bash
 sudo apt install lua5.4
 ```
-3. Ejecuta el programa con el intérprete de Lua, por ejemplo:
-   ```bash
-   lua Problem1.lua
+2. Ejecuta el programa con el intérprete de Lua, por ejemplo:
+```bash
+lua Problem1.lua
+```
